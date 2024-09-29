@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BlockType {
+  CHART
+  GRAPH
+  NOTES
+  NEWS
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String
+  Account     Account? @relation(fields: [accountId], references: [id])
+  accountId   String?
+
+  @@index([name])
+}
+
+// Necessary for Next auth
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? // @db.Text
+  access_token             String? // @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? // @db.Text
+  posts                    Post[]
+  views                    View[]
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refresh_token_expires_in Int?
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model View {
+  id                       String  @id @default(uuid())
+  name      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  blocks    Block[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Account   Account? @relation(fields: [accountId], references: [id])
+  accountId String?
+}
+
+model Block {
+  id                       String  @id @default(uuid())
+  view      View     @relation(fields: [viewId], references: [id], onDelete: Cascade)
+  viewId    String
+  name      String
+  type      BlockType // Enum for block types: chart, graph, notes, or news
+  ticker    String?   // Optional metadata
+  layout    BlockLayout? // Relation to the layout table
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model BlockLayout {
+  id        String      @id @default(cuid())
+  block     Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  blockId   String      @unique
+  x         Int      // X-coordinate
+  y         Int      // Y-coordinate
+  w         Int      // Width in grid units
+  h         Int      // Height in grid units
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  stripeCustomerId String?   @unique
+  isActive         Boolean   @default(false)
+  accounts         Account[]
+  sessions         Session[]
+  posts            Post[]
+  View             View[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
