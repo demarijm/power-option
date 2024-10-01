@@ -40,7 +40,13 @@ async function main() {
 		data: {
 			name: "Sample Chart",
 			viewId: view.id,
-			type: "CHART",
+			meta: {
+				create: {
+					type: "CHART",
+					ticker: "SPX",
+					display: "TOP10DARKPOOL",
+				},
+			},
 			layout: {
 				create: {
 					x: 0,

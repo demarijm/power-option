@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-import {
-	createTRPCRouter,
-	protectedProcedure,
-	publicProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { BlockType } from "@prisma/client";
 
 export const layoutSchema = z.object({
@@ -61,8 +57,13 @@ export const blockRouter = createTRPCRouter({
 			const data = await ctx.db.block.create({
 				data: {
 					name: input.name,
-					ticker: input.ticker,
-					type: input.type,
+					meta: {
+						create: {
+							ticker: input.ticker,
+							type: "CHART",
+							display: "TOP10DARKPOOL",
+						},
+					},
 					layout: {
 						create: {
 							...layout,
@@ -73,25 +74,44 @@ export const blockRouter = createTRPCRouter({
 			});
 			return data;
 		}),
-	delete: protectedProcedure
+	update: protectedProcedure
 		.input(
 			z.object({
-				viewId: z.string(),
+				id: z.string(),
+				name: z.string().optional(),
+				description: z.string().optional(),
+				ticker: z.string().optional(),
+				type: z.nativeEnum(BlockType).optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			const block = await ctx.db.block.findUnique({
-				where: { id: input.viewId },
-				include: {
-					view: true,
+			const data = await ctx.db.block.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					name: input?.name,
+					description: input?.description,
+					meta: {
+						update: {
+							ticker: input?.ticker,
+							type: input?.type,
+						},
+					},
 				},
 			});
-			if (block?.view?.userId !== ctx.session.user.id)
-				throw new Error("Unauthorized");
-
+			return data;
+		}),
+	delete: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
 			return ctx.db.block.delete({
 				where: {
-					id: input.viewId,
+					id: input.id,
 				},
 			});
 		}),

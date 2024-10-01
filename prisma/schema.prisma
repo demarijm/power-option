@@ -10,6 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum DisplayType {
+  FOOTPRINT
+  TIMEANDSALES
+  VOLUMEPROFILE
+  TOP10MARKET
+  TOP10DARKPOOL
+  NEWS
+  UNUSUALOPTIONS
+  GAMMASUMMARY
+  GAMMAFLOW
+  DDOI
+  GEX
+  VEX
+  CHEX
+  DEX
+  SPEX
+  THEX
+  LEX
+  VEGEX
+  REX
+  VOEX
+  VEEX
+  ZEX
+  COEX
+  UEX
+}
+
 enum BlockType {
   CHART
   GRAPH
@@ -55,7 +82,7 @@ model Account {
 }
 
 model View {
-  id                       String  @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
@@ -67,25 +94,33 @@ model View {
 }
 
 model Block {
-  id                       String  @id @default(uuid())
-  view      View     @relation(fields: [viewId], references: [id], onDelete: Cascade)
-  viewId    String
-  name      String
-  type      BlockType // Enum for block types: chart, graph, notes, or news
-  ticker    String?   // Optional metadata
-  layout    BlockLayout? // Relation to the layout table
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String       @id @default(uuid())
+  view        View         @relation(fields: [viewId], references: [id], onDelete: Cascade)
+  viewId      String
+  name        String
+  description String?
+  layout      BlockLayout? // Relation to the layout table
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  meta   BlockMeta?
+}
+
+model BlockMeta {
+  block   Block     @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  blockId String    @unique
+  type    BlockType 
+  ticker  String?
+  display DisplayType
 }
 
 model BlockLayout {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   block     Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)
-  blockId   String      @unique
-  x         Int      // X-coordinate
-  y         Int      // Y-coordinate
-  w         Int      // Width in grid units
-  h         Int      // Height in grid units
+  blockId   String   @unique
+  x         Int // X-coordinate
+  y         Int // Y-coordinate
+  w         Int // Width in grid units
+  h         Int // Height in grid units
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

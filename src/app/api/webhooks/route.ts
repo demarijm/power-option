@@ -1,9 +1,11 @@
 import Stripe from "stripe";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { db } from "@/server/db";
+import { env } from "@/env";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 	// https://github.com/stripe/stripe-node#configuration
-	apiVersion: "2022-11-15",
+	apiVersion: "2024-06-20",
 });
 
 const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -41,7 +43,7 @@ const webhookHandler = async (req: NextRequest) => {
 
 		switch (event.type) {
 			case "customer.subscription.created":
-				await prisma.user.update({
+				await db.user.update({
 					// Find the customer in our database with the Stripe customer ID linked to this purchase
 					where: {
 						stripeCustomerId: subscription.customer as string,
@@ -53,7 +55,7 @@ const webhookHandler = async (req: NextRequest) => {
 				});
 				break;
 			case "customer.subscription.deleted":
-				await prisma.user.update({
+				await db.user.update({
 					// Find the customer in our database with the Stripe customer ID linked to this purchase
 					where: {
 						stripeCustomerId: subscription.customer as string,
@@ -75,7 +77,7 @@ const webhookHandler = async (req: NextRequest) => {
 		return NextResponse.json(
 			{
 				error: {
-					message: `Method Not Allowed`,
+					message: "Method Not Allowed",
 				},
 			},
 			{ status: 405 },

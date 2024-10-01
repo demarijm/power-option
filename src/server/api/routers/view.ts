@@ -30,6 +30,7 @@ export const viewRouter = createTRPCRouter({
 					blocks: {
 						include: {
 							layout: true,
+							meta: true,
 						},
 					},
 				},

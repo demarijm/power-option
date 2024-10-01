@@ -34,7 +34,6 @@ func main() {
 
 
 
-
 	app.Get("/aapl", func(c *fiber.Ctx) error {
 
 		params := models.GetTickerDetailsParams{

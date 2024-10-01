@@ -1,17 +1,25 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
 import { useBlockStore } from "../store/block-store";
-import { Card, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@/app/_components/ui/card";
 import React, { useEffect, useMemo } from "react";
-import ReactGridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { toast } from "sonner";
 import { api, type RouterOutputs } from "@/trpc/react";
+import RGL, { WidthProvider } from "react-grid-layout";
+import DynamicBlock from "./dynamic-block";
+import type { Block } from "@prisma/client";
 
+const ReactGridLayout = WidthProvider(RGL);
 type Props = {
 	viewId: string;
-	blocks: any;
+	blocks: Block[];
 };
 
 export const BlockRender = ({ blocks, viewId }: Props) => {
@@ -38,13 +46,14 @@ export const BlockRender = ({ blocks, viewId }: Props) => {
 		}
 	}, [setBlocks, blocks]);
 
-	const layout = useMemo(() => {
+	const layout: ReactGridLayout.Layout[] = useMemo(() => {
 		return clientBlocks.map((block) => ({
 			i: block.id,
 			x: block.layout.x,
 			y: block.layout.y,
 			w: block.layout.w,
 			h: block.layout.h,
+			static: true,
 		}));
 	}, [clientBlocks]);
 
@@ -52,7 +61,13 @@ export const BlockRender = ({ blocks, viewId }: Props) => {
 		const updatedBlocks = clientBlocks.map((block) => {
 			const updatedLayout = newLayout.find((layout) => layout.i === block.id);
 			return updatedLayout
-				? { ...block, layout: { ...block.layout, ...updatedLayout } }
+				? {
+						...block,
+						layout: {
+							...block.layout,
+							...updatedLayout,
+						},
+					}
 				: block;
 		});
 		blockMutation.mutate({
@@ -75,14 +90,9 @@ export const BlockRender = ({ blocks, viewId }: Props) => {
 	};
 
 	const blocksToRender = useMemo(() => {
-		return clientBlocks?.map((block) => (
-			<div key={block.id}>
-				<Card className="w-full h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
-					<CardHeader className="border-b p-3">
-						<CardTitle>{block?.name}</CardTitle>
-					</CardHeader>
-					<div className="text-xs">{JSON.stringify(block.layout, null, 2)}</div>
-				</Card>
+		return clientBlocks?.map((l) => (
+			<div key={l.id}>
+				<DynamicBlock block={l} />
 			</div>
 		));
 	}, [clientBlocks]);
@@ -90,10 +100,9 @@ export const BlockRender = ({ blocks, viewId }: Props) => {
 	return (
 		<>
 			<ReactGridLayout
-				className="layout "
+				className="layout w-screen"
 				cols={12}
 				rowHeight={150}
-				width={1200}
 				layout={layout}
 				onLayoutChange={onLayoutChange}
 			>

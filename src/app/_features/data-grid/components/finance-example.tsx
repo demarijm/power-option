@@ -26,7 +26,7 @@ import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import styles from "../styles/TicketStyle.module.css";
-import { TickerCellRenderer } from "../cell-renderers/ticket-cell-render";
+import { TickerCellRenderer } from "./ticket-cell-render";
 import { getData } from "../assets/data";
 
 interface Props {
