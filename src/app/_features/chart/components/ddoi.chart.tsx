@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { api } from "@/trpc/react";
 const DdoiChart: React.FC = () => {
 	const { data, error } = api.option.getDdoi.useQuery({
@@ -12,7 +11,7 @@ const DdoiChart: React.FC = () => {
 	return (
 		<div>
 			<h1>Ddoi Chart</h1>
-			<pre>{<pre>{JSON.stringify(data, null, 2)}</pre>}</pre>
+			{/* <pre>{<pre>{JSON.stringify(data, null, 2)}</pre>}</pre> */}
 		</div>
 	);
 };
