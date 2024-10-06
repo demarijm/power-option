@@ -13,7 +13,7 @@ import { ZodError } from "zod";
 
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import { poly } from "@/server/polygon";
+import { poly, polySocket } from "@/server/polygon";
 import { email } from "../email";
 /**
  * 1. CONTEXT
@@ -33,6 +33,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 	return {
 		db,
 		poly,
+		polySocket,
 		email,
 		session,
 		...opts,

@@ -43,6 +43,7 @@ const BlockSettings = ({ block }: Props) => {
 			id: block.id,
 			name: data.name,
 			type: data.type,
+			ticker: block.meta.ticker,
 		});
 	}
 	return (
@@ -76,6 +77,13 @@ const BlockSettings = ({ block }: Props) => {
 												error={formState.errors.name}
 												registration={register("name")}
 											/>
+											<Input
+												label="Ticker"
+												defaultValue={block.ticker}
+												error={formState.errors.ticker}
+												registration={register("ticker")}
+											/>
+
 											<Select
 												label="Type"
 												defaultValue={block.meta.type}

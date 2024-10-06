@@ -2,12 +2,12 @@ import type { CustomCellRendererProps } from "@ag-grid-community/react";
 import type { FunctionComponent } from "react";
 
 export const TickerCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
-	data,
+  data,
 }) => {
-	return (
-		data && (
-			<div>
-				{/* <img
+  return (
+    data && (
+      <div>
+        {/* <img
 					src={`/example/finance/logos/${data.ticker}.png`}
 					style={{
 						width: "20px",
@@ -16,9 +16,9 @@ export const TickerCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
 						borderRadius: "32px",
 					}}
 				/> */}
-				<b className="custom-ticker">{data.ticker}</b>
-				<span className="ticker-name"> {data.name}</span>
-			</div>
-		)
-	);
+        <b className="custom-ticker">{data.ticker}</b>
+        <span className="ticker-name"> {data.name}</span>
+      </div>
+    )
+  );
 };

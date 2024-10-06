@@ -19,7 +19,7 @@ export default async function Header() {
 	return (
 		<>
 			<Disclosure as="nav" className="bg-white shadow">
-				<div className="mx-auto  px-4 sm:px-6 mb-3 lg:px-8">
+				<div className="mx-auto mb-3 px-4 sm:px-6 lg:px-8">
 					<div className="flex h-16 justify-between">
 						<div className="flex">
 							<div className="flex flex-shrink-0 items-center">
@@ -34,8 +34,8 @@ export default async function Header() {
 								{views.map((item) => (
 									<Link
 										key={item.name}
-										href={`/$view/${item.id}`}
-										className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-med ${item.id ? "border-indigo-500 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"}`}
+										href={`/views/${item.id}`}
+										className={`font-med inline-flex items-center border-b-2 px-1 pt-1 text-sm ${item.id ? "border-indigo-500 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"}`}
 									>
 										{item.name}
 									</Link>
@@ -107,7 +107,7 @@ export default async function Header() {
 								key={item.name}
 								as="a"
 								href={`/views/${item.id}`}
-								className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${item.id ? "bg-indigo-50 border-indigo-500 text-indigo-700" : "border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"}`}
+								className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${item.id ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"}`}
 							>
 								{item.name}
 							</DisclosureButton>

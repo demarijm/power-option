@@ -6,25 +6,25 @@ import { redirect } from "next/navigation";
 import { Card } from "./_components/ui/card";
 
 export default async function Home() {
-	const views = await api.view.getAll();
-	const session = await getServerAuthSession();
-	void api.post.getLatest.prefetch();
-	if (!session) {
-		redirect("/api/auth/signin");
-	}
+  const views = await api.view.getAll();
+  const session = await getServerAuthSession();
+  void api.post.getLatest.prefetch();
+  if (!session) {
+    redirect("/api/auth/signin");
+  }
 
-	return (
-		<HydrateClient>
-			<div className="max-w-full px-3  min-h-screen">
-				{views.map((v) => {
-					return (
-						<Link key={v.id} href={`/views/${v.id}`}>
-							<Card>{v.name}</Card>
-						</Link>
-					);
-				})}
-				<Dashboard />
-			</div>{" "}
-		</HydrateClient>
-	);
+  return (
+    <HydrateClient>
+      <div className="min-h-screen max-w-full px-3">
+        {views.map((v) => {
+          return (
+            <Link key={v.id} href={`/views/${v.id}`}>
+              <Card>{v.name}</Card>
+            </Link>
+          );
+        })}
+        <Dashboard />
+      </div>{" "}
+    </HydrateClient>
+  );
 }

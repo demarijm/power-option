@@ -12,12 +12,12 @@ import { optionRouter } from "./routers/option";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	post: postRouter,
-	user: userRouter,
-	view: viewRouter,
-	block: blockRouter,
-	summary: summaryRouter,
-	option: optionRouter,
+  post: postRouter,
+  user: userRouter,
+  view: viewRouter,
+  block: blockRouter,
+  summary: summaryRouter,
+  option: optionRouter,
 });
 
 // export type definition of API

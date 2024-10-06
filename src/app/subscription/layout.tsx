@@ -5,31 +5,31 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export default async function DashboardSubscription({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const session = await getServerAuthSession();
+  const session = await getServerAuthSession();
 
-	if (session?.user?.isActive) {
-		redirect("/dashboard");
-	}
-	// if (status === "unauthenticated") {
-	// 	return redirect("/");
-	// }
+  if (session?.user?.isActive) {
+    redirect("/dashboard");
+  }
+  // if (status === "unauthenticated") {
+  // 	return redirect("/");
+  // }
 
-	// if (status === "loading") {
-	// 	return <p>Loading...</p>;
-	// }
+  // if (status === "loading") {
+  // 	return <p>Loading...</p>;
+  // }
 
-	// if (status === "authenticated" && !session?.user?.isActive) {
-	// }
-	return (
-		<section className="flex min-h-screen items-center">
-			{/* Include shared UI here e.g. a header or sidebar */}
-			<nav></nav>
+  // if (status === "authenticated" && !session?.user?.isActive) {
+  // }
+  return (
+    <section className="flex min-h-screen items-center">
+      {/* Include shared UI here e.g. a header or sidebar */}
+      <nav></nav>
 
-			{children}
-		</section>
-	);
+      {children}
+    </section>
+  );
 }

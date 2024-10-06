@@ -80,7 +80,7 @@ export const blockRouter = createTRPCRouter({
 				id: z.string(),
 				name: z.string().optional(),
 				description: z.string().optional(),
-				ticker: z.string().optional(),
+				ticker: z.string().optional().default("SPX"),
 				type: z.nativeEnum(BlockType).optional(),
 			}),
 		)

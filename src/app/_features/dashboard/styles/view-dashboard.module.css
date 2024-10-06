@@ -1,26 +1,25 @@
 /* src/App.css */
 .layout {
-    background: #f0f0f0;
-  }
-  
-  .chart-drag-handle {
-    background: #e0e0e0;
-    padding: 5px;
-    text-align: center;
-    cursor: move;
-  }
-  
-  .react-grid-item {
-    background: #ffffff;
-    border: 1px solid #d0d0d0;
-  }
-  
-  .react-resizable-handle {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    bottom: 0;
-    right: 0;
-    cursor: se-resize;
-  }
-  
+  background: #f0f0f0;
+}
+
+.chart-drag-handle {
+  background: #e0e0e0;
+  padding: 5px;
+  text-align: center;
+  cursor: move;
+}
+
+.react-grid-item {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}

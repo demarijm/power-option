@@ -1,4 +1,5 @@
 import DisplayDarkPoolChart from "../../chart/components/darkpool.chart";
+import DdoiChart from "../../chart/components/ddoi.chart";
 import type { DisplayType } from "@prisma/client";
 export const renderChart = (chartType: DisplayType) => {
 	switch (chartType) {
@@ -7,7 +8,7 @@ export const renderChart = (chartType: DisplayType) => {
 		case "GAMMAFLOW":
 			return "Top 10";
 		case "DDOI":
-			return "Top 5";
+			return <DdoiChart />;
 		default:
 			return "Unknown";
 	}
