@@ -14,6 +14,8 @@ import { Select } from "@/app/_components/ui/form/select";
 import { Settings } from "lucide-react";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import { MultiSelectField } from "@/app/_components/ui/multi-select-field";
+import SelectTicker from "../../ticker/components/select-ticker";
 type Props = {
 	block: Block & {
 		meta: BlockMeta;
@@ -65,7 +67,7 @@ const BlockSettings = ({ block }: Props) => {
 							<div className="grid w-full items-center gap-2">
 								<Form onSubmit={handleEditBlock} schema={editBlockSchema}>
 									{({ register, formState }) => (
-										<div className="w-full gap-3">
+										<div className="w-full grid gap-3">
 											<input
 												type="hidden"
 												{...register("viewId")}
@@ -77,12 +79,13 @@ const BlockSettings = ({ block }: Props) => {
 												error={formState.errors.name}
 												registration={register("name")}
 											/>
-											<Input
+											<SelectTicker />
+											{/* <Input
 												label="Ticker"
 												defaultValue={block.ticker}
 												error={formState.errors.ticker}
 												registration={register("ticker")}
-											/>
+											/> */}
 
 											<Select
 												label="Type"
@@ -102,10 +105,19 @@ const BlockSettings = ({ block }: Props) => {
 														label: "Notes",
 														value: "NOTES",
 													},
+													{
+														label: "News",
+														value: "NEWS",
+													},
 												]}
 											/>
 
-											<Button variant={"secondary"} name="submit" type="submit">
+											<Button
+												className="cursor-pointer"
+												variant={"secondary"}
+												name="submit"
+												type="submit"
+											>
 												Save
 											</Button>
 

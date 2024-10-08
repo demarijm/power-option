@@ -6,7 +6,15 @@ import { withSentryConfig } from "@sentry/nextjs";
 import "./src/env.js"; // Dynamic import of env.js
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+	images: {
+		remotePatterns: [
+			{
+				hostname: "cdn.benzinga.com",
+			}
+		]
+	}
+};
 
 // Sentry configuration, now using ES module syntax
 const sentryConfig = withSentryConfig(config, {
@@ -38,6 +46,8 @@ const sentryConfig = withSentryConfig(config, {
 
 	// Automatically tree-shake Sentry logger statements to reduce bundle size
 	disableLogger: true,
+
+
 
 	// Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
 	automaticVercelMonitors: true,
