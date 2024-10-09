@@ -1,11 +1,9 @@
 "use client";
 import { api } from "@/trpc/react";
-import { ITickerNews } from "@polygon.io/client-js";
 import type { Block, BlockMeta } from "@prisma/client";
 import { Avatar, List, Space } from "antd";
-import { MessageCircle, Star, ThumbsUp } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import type React from "react";
 type Props = {
 	block: Block & {
 		meta: BlockMeta;

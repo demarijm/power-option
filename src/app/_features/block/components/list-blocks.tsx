@@ -23,7 +23,13 @@ type Props = {
 };
 
 export const BlockRender = ({ blocks, viewId }: Props) => {
-	const { clientBlocks, updateBlockLayout, setBlocks } = useBlockStore();
+	const {
+		clientBlocks,
+		updateBlockLayout,
+		setBlocks,
+		editMode,
+		toggleEditMode,
+	} = useBlockStore();
 
 	const utils = api.useUtils();
 
@@ -53,9 +59,9 @@ export const BlockRender = ({ blocks, viewId }: Props) => {
 			y: block.layout.y,
 			w: block.layout.w,
 			h: block.layout.h,
-			static: true,
+			static: editMode,
 		}));
-	}, [clientBlocks]);
+	}, [clientBlocks, editMode]);
 
 	const handleSaveLayout = (newLayout: ReactGridLayout.Layout[]) => {
 		const updatedBlocks = clientBlocks.map((block) => {

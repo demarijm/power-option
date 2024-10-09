@@ -74,4 +74,61 @@ export const optionRouter = createTRPCRouter({
 			});
 			return results;
 		}),
+	getOptionChain: publicProcedure
+		.input(
+			z.object({
+				ticker: z.string().min(1).optional().default("AAPL"),
+				expiration_date: z.string().optional(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const optionChain = await ctx.poly.options.snapshotOptionChain(
+				input.ticker,
+				{
+					expiration_date: input.expiration_date,
+				},
+			);
+
+			// Check if the optionChain or its results are empty
+			console.log("Option Chain Response:", optionChain);
+
+			if (
+				!optionChain ||
+				!optionChain.results ||
+				optionChain.results.length === 0
+			) {
+				return {
+					error: "No data available for the given ticker and expiration date.",
+				};
+			}
+
+			const impliedVolatilities = optionChain.results.map(
+				(item) => item.implied_volatility,
+			);
+
+			// Calculate the average IV dynamically
+			const totalIV = impliedVolatilities.reduce((acc, iv) => acc + iv, 0);
+			const averageIV =
+				impliedVolatilities.length > 0
+					? totalIV / impliedVolatilities.length
+					: 0;
+
+			// Reshape the data with the calculated average IV
+			const reshapedData = {
+				strikePrices: optionChain.results.map(
+					(item) => item.details.strike_price,
+				),
+				gammas: optionChain.results.map((item) => item.greeks.gamma),
+				impliedVolatilities: impliedVolatilities,
+				averageIVs: optionChain.results.map(() => averageIV), // Apply calculated average IV for all entries
+				positiveGammas: optionChain.results.map((item) =>
+					item.greeks.gamma > 0 ? item.greeks.gamma : 0,
+				),
+				negativeGammas: optionChain.results.map((item) =>
+					item.greeks.gamma < 0 ? item.greeks.gamma : 0,
+				),
+			};
+
+			return reshapedData;
+		}),
 });

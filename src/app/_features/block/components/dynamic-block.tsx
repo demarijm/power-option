@@ -43,7 +43,6 @@ const DynamicBlock = ({ block }: Props) => {
 						<CardTitle>{block?.name}</CardTitle>
 						<div className="inline-flex gap-2 *:cursor-pointer">
 							<BlockSettings block={block} />
-
 							<LockKeyholeIcon size={18} />
 						</div>
 					</div>

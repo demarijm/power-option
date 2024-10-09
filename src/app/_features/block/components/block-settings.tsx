@@ -5,7 +5,12 @@ import {
 	PopoverContent,
 } from "@/app/_components/ui/popover";
 import { Button } from "@/app/_components/ui/button";
-import { BlockType, type Block, type BlockMeta } from "@prisma/client";
+import {
+	BlockType,
+	DisplayType,
+	type Block,
+	type BlockMeta,
+} from "@prisma/client";
 import { Form } from "@/app/_components/ui/form/form";
 
 import { z } from "zod";
@@ -25,6 +30,8 @@ const editBlockSchema = z.object({
 	viewId: z.string(),
 	name: z.string(),
 	type: z.nativeEnum(BlockType),
+	ticker: z.string().optional(),
+	display: z.nativeEnum(DisplayType),
 });
 const BlockSettings = ({ block }: Props) => {
 	const utils = api.useUtils();
@@ -46,6 +53,7 @@ const BlockSettings = ({ block }: Props) => {
 			name: data.name,
 			type: data.type,
 			ticker: block.meta.ticker,
+			display: data.display,
 		});
 	}
 	return (
@@ -110,6 +118,18 @@ const BlockSettings = ({ block }: Props) => {
 														value: "NEWS",
 													},
 												]}
+											/>
+											<Select
+												label="DisplayType"
+												defaultValue={block.meta.display}
+												error={formState.errors.type}
+												registration={register("display")}
+												options={Object.entries(DisplayType).map(
+													([key, value]) => ({
+														label: key,
+														value: value,
+													}),
+												)}
 											/>
 
 											<Button

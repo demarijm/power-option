@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { BlockType } from "@prisma/client";
+import { BlockType, DisplayType } from "@prisma/client";
 
 export const layoutSchema = z.object({
 	x: z.number(),
@@ -82,6 +82,7 @@ export const blockRouter = createTRPCRouter({
 				description: z.string().optional(),
 				ticker: z.string().optional().default("SPX"),
 				type: z.nativeEnum(BlockType).optional(),
+				display: z.nativeEnum(DisplayType).optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -96,6 +97,7 @@ export const blockRouter = createTRPCRouter({
 						update: {
 							ticker: input?.ticker,
 							type: input?.type,
+							display: input?.display,
 						},
 					},
 				},
